@@ -14,7 +14,7 @@ jobs:
       - name: Get Latest Release
         id: get_latest_release
         run: |
-          latest_release=$(curl --silent 'https://api.github.com/repos/:owner/:repo/releases/latest' | jq -r '.tag_name')
+          latest_release=$(curl --silent 'https://api.github.com/repos/langhuihui/monibuca/releases/latest' | jq -r '.tag_name')
           echo "::set-output name=latest_release::${latest_release}"
 
       - name: Compare with previous release
