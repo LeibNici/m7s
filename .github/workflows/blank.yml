@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: Check latest release version
         id: latest_release
-        run: echo "::set-output name=release::$(curl --silent 'https://api.github.com/repos/:owner/:repo/releases/latest' | jq -r '.tag_name')"
+        run: echo "::set-output name=release::$(curl --silent 'https://api.github.com/repos/langhuihui/monibuca/releases/latest' | jq -r '.tag_name')"
       - name: Display latest release version
         run: echo "Latest release version is ${{ steps.latest_release.outputs.release }}"
