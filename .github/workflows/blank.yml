@@ -13,3 +13,6 @@ jobs:
     steps:
       - name: My step
         run: echo "LATEST_RELEASE=${VARIABLE_NAME}" >> $GITHUB_ENV
+
+      - name: My step
+        run: echo env.PREVIOUS_RELEASE
