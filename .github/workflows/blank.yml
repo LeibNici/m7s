@@ -21,7 +21,7 @@ jobs:
         run: echo ::set-output name=exists::${{ env.VERSION_NUMBER != '' }}
       - name: Set environment variable
         if: steps.check_variable.outputs.exists == 'false'
-        run: echo ::set-env name=VERSION_NUMBER::${{ steps.latest_release.outputs.release }}
+        run: echo "VERSION_NUMBER=${{ steps.latest_release.outputs.release }}" >> $GITHUB_ENV
       - name: Compare versions and download new release if available
         if: steps.check_variable.outputs.exists == 'true' && steps.latest_release.outputs.release != env.VERSION_NUMBER
         run: |
