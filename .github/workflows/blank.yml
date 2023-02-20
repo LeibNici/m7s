@@ -1,0 +1,15 @@
+name: Check Latest Release
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  check-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check latest release version
+        id: latest_release
+        run: echo "::set-output name=release::$(curl --silent 'https://api.github.com/repos/my-org/my-repo/releases/latest' | grep -oP '"tag_name": "\K(.*)(?=")')"
+      - name: Display latest release version
+        run: echo "Latest release version is ${{ steps.latest_release.outputs.release }}"
