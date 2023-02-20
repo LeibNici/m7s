@@ -20,7 +20,7 @@ jobs:
         id: check_variable
         run: |
           echo ::set-output name=exists::${{ env.VERSION_NUMBER != '' }}
-          echo ${{ env.VERSION_NUMBER != '' }}
+          echo ${{ env.VERSION_NUMBER }}
       - name: Set environment variable
         if: steps.check_variable.outputs.exists == 'false'
         run: echo "VERSION_NUMBER=${{ steps.latest_release.outputs.release }}" >> $GITHUB_ENV
