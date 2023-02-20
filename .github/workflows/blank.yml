@@ -14,14 +14,15 @@ jobs:
         run: |
           latest_release=$(curl --silent 'https://api.github.com/repos/langhuihui/monibuca/releases/latest' | jq -r '.tag_name')
           echo "::set-output name=release::${latest_release}"
-      - name: Display latest release version
-        run: echo "Latest release version is ${{ steps.latest_release.outputs.release }}"
+          echo "Latest release version is $latest_release"
       - name: Check if release version has changed
         id: version_changed
         run: |
-          if [ "${{ steps.latest_release.outputs.release }}" != "${{ env.LAST_RELEASE }}" ]; then
-            echo "Release version has changed!"
-            echo "::set-env name=LAST_RELEASE::${{ steps.latest_release.outputs.release }}"
+          current_release="${{ steps.latest_release.outputs.release }}"
+          last_release="${{ env.LAST_RELEASE }}"
+          if [ "$current_release" != "$last_release" ]; then
+            echo "Release version has changed from $last_release to $current_release"
+            echo "::set-env name=LAST_RELEASE::$current_release"
           else
             echo "Release version has not changed"
           fi
