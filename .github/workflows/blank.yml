@@ -11,23 +11,6 @@ jobs:
     steps:
       - name: Check latest release version
         id: latest_release
-        run: echo "::set-output name=release::$(curl --silent 'https://api.github.com/repos/langhuihui/monibuca/releases/latest' | jq -r '.tag_name')"
-      - name: Compare with previous release version
-        id: compare_release
         run: |
-          if [ -f release_version.txt ]; then
-            previous_release=$(cat release_version.txt)
-            if [ "$previous_release" == "${{ steps.latest_release.outputs.release }}" ]; then
-              echo "No new release available"
-              exit 0
-            fi
-          fi
-          echo "${{ steps.latest_release.outputs.release }}" > release_version.txt
-          echo "New release available"
-      - name: Download latest release
-        if: steps.compare_release.outputs.new_release == 'true'
-        run: |
-          latest_release_url="https://github.com/:owner/:repo/releases/latest/download/release.zip"
-          curl -L $latest_release_url -o release.zip
-          unzip release.zip -d /path/to/download/folder/
-          rm release.zip
+          latest_release=$(curl --silent 'https://api.github.com/repos/langhuihui/monibuca/releases/latest' | jq -r '.tag_name')
+          echo "LATEST_RELEASE=${latest_release}" >> $GITHUB_ENV
