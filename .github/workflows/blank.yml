@@ -22,6 +22,7 @@ jobs:
         run: |
           latest_version=$(curl --silent "https://api.github.com/repos/langhuihui/monibuca/releases/latest" | jq -r .tag_name | sed 's/^v//')
           echo "::set-output name=latest_version::$latest_version"
+          echo "Latest version: $latest_version"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
