@@ -13,21 +13,22 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
+      -
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ env.DOCKER_USERNAME }}
-          password: ${{ env.DOCKER_PASSWORD }}
+      - name: Get latest version
+        id: latest_version
+        run: |
+          latest_version=$(curl --silent "https://api.github.com/repos/langhuihui/monibuca/releases/latest" | grep -Eo '"tag_name": "\K.*?(?=")')
+          echo ::set-output name=latest_version::$latest_version
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: chm852098505/m7s:latest
+          tags: chm852098505/m7s:${{ steps.latest_version.outputs.latest_version }}
           dockerfile: ./Dockerfile
           username: ${{ env.DOCKER_USERNAME }}
           password: ${{ env.DOCKER_PASSWORD }}
