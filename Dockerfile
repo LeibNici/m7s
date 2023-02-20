@@ -10,6 +10,6 @@ RUN apk add --no-cache curl tar && \
     mv monibuca*/m7s /app/m7s && \
     rm -rf monibuca*
 
-EXPOSE 8080
+EXPOSE 8080 1935 554 8000/udp 8001 9000 4433
 
 CMD ["/app/m7s"]
