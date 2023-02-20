@@ -10,16 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Save variable to environment
-        run: echo "MY_VARIABLE=my_value" >> $GITHUB_ENV
+      - name: show
+        run: echo "${{ env.MY_VARIABLE }}"
 
-      - name: Save to Repository Environment
-        uses: stefanzweifel/git-auto-commit-action@v4
+      - name: Store variable
+        run: echo "MY_VARIABLE=hello" >> $GITHUB_ENV
+      - name: Save variable to repo secrets
+        uses: montudor/action-set-repo-secret@v1.1
         with:
-          commit_message: 'Save MY_VARIABLE to Repository Environment'
-          file_pattern: 'README.md'
-          name: 'Save MY_VARIABLE'
-          email: '852098505@qq.com'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MY_VARIABLE: ${{ env.MY_VARIABLE }}
+          name: MY_VARIABLE
+          value: ${{ env.MY_VARIABLE }}
