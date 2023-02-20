@@ -1,22 +1,27 @@
-name: Check Latest Release
+name: Build and Push Docker Image
 
 on:
   push:
     branches:
       - main
 
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
 jobs:
-  check-release:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: show
-        run: echo "${{ env.MY_VARIABLE }}"
-
-      - name: Store variable
-        run: echo "MY_VARIABLE=hello" >> $GITHUB_ENV
-      - name: Save variable to repo secrets
-        uses: montudor/action-set-repo-secret@v1.1
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
         with:
-          name: MY_VARIABLE
-          value: ${{ env.MY_VARIABLE }}
+          context: .
+          push: true
+          tags: chm852098505/m7s:latest
+          dockerfile: ./Dockerfile
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
