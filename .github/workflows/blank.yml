@@ -8,26 +8,12 @@ on:
 jobs:
   check-release:
     runs-on: ubuntu-latest
-    steps:
-      - name: Check latest release version
-        id: latest_release
-        run: |
-          latest_release=$(curl --silent 'https://api.github.com/repos/langhuihui/monibuca/releases/latest' | jq -r '.tag_name')
-          echo "::set-output name=release::$latest_release"
-      - name: Display latest release version
-        run: echo "Latest release version is ${{ steps.latest_release.outputs.release }}"
-      - name: Check if environment variable exists
-        id: check_variable
-        run: |
-          echo ::set-output name=exists::${{ env.VERSION_NUMBER != '' }}
-          echo ${{ env.VERSION_NUMBER }}
-      - name: Set environment variable
-        if: steps.check_variable.outputs.exists == 'false'
-        run: echo "VERSION_NUMBER=${{ steps.latest_release.outputs.release }}" >> $GITHUB_ENV
-      - name: Compare versions and download new release if available
-        if: steps.check_variable.outputs.exists == 'true' && steps.latest_release.outputs.release != env.VERSION_NUMBER
-        run: |
-          echo "New release is available. Downloading..."
-          # Download the latest release
-          # Set the VERSION_NUMBER environment variable to the latest release
-          echo "::set-env name=VERSION_NUMBER::${{ steps.latest_release.outputs.release }}"
+  steps:
+    - name: Set the value
+      id: step_one
+      run: |
+        echo "action_state=yellow" >> $GITHUB_ENV
+    - name: Use the value
+      id: step_two
+      run: |
+        echo "${{ env.action_state }}" # This will output 'yellow'
