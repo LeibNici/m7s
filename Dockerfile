@@ -1,15 +1,10 @@
 FROM alpine:latest
 
-WORKDIR /app
+WORKDIR /opt/media
 
-RUN apk add --no-cache curl tar && \
-    latest_release=$(curl --silent "https://api.github.com/repos/langhuihui/monibuca/releases/latest" | grep -Eo '"tag_name": "\K.*?(?=")') && \
-    curl -LJO "https://github.com/langhuihui/monibuca/releases/download/$latest_release/monibuca-linux-amd64.tar.gz" && \
-    tar -xzvf monibuca-linux-amd64.tar.gz && \
-    rm monibuca-linux-amd64.tar.gz && \
-    mv monibuca*/m7s /app/m7s && \
-    rm -rf monibuca*
+RUN apk add --no-cache curl \
+    && curl -s https://api.github.com/repos/langhuihui/monibuca/releases/latest | grep "browser_download_url.*linux_amd64.tar.gz" | cut -d : -f 2,3 | tr -d \" | xargs curl -L -o monibuca.tar.gz && tar -xf monibuca.tar.gz
 
-EXPOSE 8080 1935 554 8000/udp 8001 9000 4433
+EXPOSE 8080 1935 554 8000 8001 9000 4433
 
-CMD ["/app/m7s"]
+CMD ["./m7s"]
