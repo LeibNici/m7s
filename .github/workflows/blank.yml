@@ -20,15 +20,15 @@ jobs:
       - name: Get latest version
         id: latest_version
         run: |
-          latest_version=$(curl --silent "https://api.github.com/repos/langhuihui/monibuca/releases/latest" | grep -Eo '"tag_name": "\K.*?(?=")')
-          echo ::set-output name=latest_version::$latest_version
+          latest_release=$(curl --silent 'https://api.github.com/repos/langhuihui/monibuca/releases/latest' | jq -r '.tag_name')
+          echo "::set-output name=release::$latest_release"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: chm852098505/m7s:${{ steps.latest_version.outputs.latest_version }}
+          tags: chm852098505/m7s:${{ steps.latest_release.outputs.release }}
           dockerfile: ./Dockerfile
           username: ${{ env.DOCKER_USERNAME }}
           password: ${{ env.DOCKER_PASSWORD }}
