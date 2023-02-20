@@ -9,7 +9,7 @@ jobs:
   check-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Use the value
+      - name: Use the value1
         id: step_two
         run: |
           echo "${{ env.MY_VARIABLE }}"
