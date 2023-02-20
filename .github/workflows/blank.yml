@@ -9,26 +9,8 @@ jobs:
   check-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Get Latest Release
-        id: get_latest_release
-        run: |
-          latest_release=$(curl --silent 'https://api.github.com/repos/langhuihui/monibuca/releases/latest' | jq -r '.tag_name')
-          echo "::set-output name=latest_release::${latest_release}"
-
-      - name: Compare with previous release
-        id: compare_release
-        run: |
-          echo "Latest release: ${{ steps.get_latest_release.outputs.latest_release }}"
-          echo "Previous release: ${{ env.PREV_RELEASE }}"
-
-          if [ "${{ steps.get_latest_release.outputs.latest_release }}" != "${{ env.PREV_RELEASE }}" ]; then
-            echo "There is a new release"
-          else
-            echo "No new release"
-          fi
-
-        env:
-          PREV_RELEASE: ${{ secrets.PREV_RELEASE }}
+      - name: Check latest release version
+        id: latest_release
+        run: echo "::set-output name=release::$(curl --silent 'https://api.github.com/repos/:owner/:repo/releases/latest' | jq -r '.tag_name')"
+      - name: Display latest release version
+        run: echo "Latest release version is ${{ steps.latest_release.outputs.release }}"
