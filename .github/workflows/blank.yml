@@ -6,10 +6,10 @@ on:
       - main
 
 jobs:
-  download-release:
+  my-job:
     runs-on: ubuntu-latest
+    env:
+      VARIABLE_NAME: value
     steps:
-      - name: Get latest release
-        run: |
-          latest_release=$(curl --silent 'https://api.github.com/repos/langhuihui/monibuca/releases/latest' | jq -r '.tag_name')
-          echo "LATEST_RELEASE=${latest_release}" >> $GITHUB_ENV
+      - name: My step
+        run: echo "LATEST_RELEASE=${$VARIABLE_NAME}" >> $GITHUB_ENV
