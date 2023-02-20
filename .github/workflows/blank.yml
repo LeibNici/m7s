@@ -9,7 +9,7 @@ jobs:
   check-release:
     runs-on: ubuntu-latest
     steps:
-      -
+
       - name: Save variable to environment
         run: echo "MY_VARIABLE=my_value" >> $GITHUB_ENV
 
