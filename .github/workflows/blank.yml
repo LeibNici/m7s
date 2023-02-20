@@ -1,9 +1,8 @@
 name: Build and Push Docker Image
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: "*/10 * * * *"
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
