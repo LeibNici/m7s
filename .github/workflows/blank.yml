@@ -36,11 +36,12 @@ jobs:
         run: |
           if curl -sSLf "https://hub.docker.com/v2/repositories/${{ env.DOCKER_USERNAME }}/m7s/tags/${{ steps.latest_version.outputs.latest_version }}" > /dev/null 2>&1; then
             echo "镜像存在，不进行构建"
-            exit 0
+            echo "::set-env name=image_exists::true"
           fi
           echo "镜像不存在, 准备构建..."
 
       - name: Build and push Docker image
+        if: env.image_exists != 'true'
         uses: docker/build-push-action@v2
         with:
           context: .
