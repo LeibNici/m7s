@@ -22,11 +22,25 @@ jobs:
       - name: Get latest version
         id: latest_version
         run: |
-          latest_version=$(curl --silent -g "https://api.github.com/repos/langhuihui/monibuca/releases/latest" | jq -r .tag_name | sed 's/^v//')
+          latest_version=""
+          retries=0
+          until [[ -n $latest_version || $retries -ge 5 ]]; do
+            latest_version=$(curl --silent -g "https://api.github.com/repos/langhuihui/monibuca/releases/latest" | jq -r .tag_name | sed 's/^v//')
+            retries=$((retries + 1))
+            echo "尝试重新获取最新版本..."
+            sleep 5
+          done
+          
+          if [[ -z $latest_version ]]; then
+            echo "版本号为空, 尝试次数达到上限, 准备退出... "
+            echo "version_flag=true" >> $GITHUB_ENV
+          fi
+          
           echo "::set-output name=latest_version::$latest_version"
           echo "Latest version: $latest_version"
 
       - name: Login to DockerHub
+        if: env.version_flag != 'true'
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
