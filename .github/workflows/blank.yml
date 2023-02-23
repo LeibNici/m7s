@@ -27,6 +27,9 @@ jobs:
           until [[ -n $latest_version || $retries -ge 5 ]]; do
             echo "尝试获取最新版本..."
             latest_version=$(curl --silent -g "https://api.github.com/repos/langhuihui/monibuca/releases/latest" | jq -r .tag_name | sed 's/^v//')
+            if [[ $latest_version == "null" ]]; then
+              latest_version=""
+            fi
             retries=$((retries + 1))
             sleep 5
           done
